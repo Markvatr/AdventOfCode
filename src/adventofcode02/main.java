@@ -49,6 +49,10 @@ public class main {
         if(dubbs) dubbles++;
         if(tripps) tripples++;
     }
+    
+    private static void compareBox(String s){
+        
+    }
 
     public static void main(String[] args) {
         try {
@@ -62,10 +66,16 @@ public class main {
                 }
             }
 
+//            for (String s : boxes) {
+//                scanBox(s);
+//            }
+//            System.out.println((dubbles * tripples)+"");
+
             for (String s : boxes) {
-                scanBox(s);
+                compareBox(s);
             }
-            System.out.println((dubbles * tripples)+"");
+
+            
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
