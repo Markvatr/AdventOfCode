@@ -35,19 +35,72 @@ public class main {
             eventObjects.add(new dateEvent(temp[0], temp[1], temp[2]));
         }
         eventObjects.sort(dateEvent.sort);
-        
-        schedule = new String[eventObjects.size() + 1][61];
+        dateEvent prevEvent = null;
+        int j = 1;
+        for (dateEvent de : eventObjects) {
+            String tempDate = de.getMonth() + "-" + de.getDay();
+            if (prevEvent != null) {
+                if (!(prevEvent.getMonth() + "-" + prevEvent.getDay()).equals(tempDate)) {
+                    j++;
+                }
+            }
+            prevEvent = de;
+        }
+        schedule = new String[j][62];
         schedule[0][0] = "Date";
         schedule[0][1] = "ID";
-        for(int i = 0; i < eventObjects.size(); i++){
-            schedule[0][i+2] = "" + eventObjects.get(i).returnminutes();
+        for (int i = 0; i <= 59; i++) {
+
+            schedule[0][i + 2] = "" + i;
         }
-        
-        
-        for(String[] str : schedule){
-            for(String s : str){
-                System.out.println("["+s+"] \t");
+        for (int i = 1; i < schedule[0].length; i++) {
+            for (int x = 1; x < schedule.length; x++) {
+                schedule[x][i] = ".";
             }
+        }
+
+        prevEvent = null;
+        j = 1;
+//        for (dateEvent de : eventObjects) {
+//            String tempDate = de.getMonth() + "-" + de.getDay();
+//            if (prevEvent != null) {
+//                if (!(prevEvent.getMonth() + "-" + prevEvent.getDay()).equals(tempDate)) {
+//                    schedule[j][0] = tempDate;
+//                    schedule[j][1] = de.getID();
+//                    j++;
+//                }
+//            }
+//            prevEvent = de;
+//        }
+        for (dateEvent de : eventObjects) {
+            String tempDate = de.getMonth() + "-" + de.getDay();
+            switch (de.getID()) {
+                case "Falls": {
+
+                    break;
+                }
+                case "Wakes": {
+
+                    break;
+                }
+                default: {
+                    if (prevEvent != null) {
+                        if (!(prevEvent.getMonth() + "-" + prevEvent.getDay()).equals(tempDate)) {
+                            schedule[j][0] = tempDate;
+                            schedule[j][1] = de.getID();
+                            j++;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        for (String[] str : schedule) {
+            for (String s : str) {
+                System.out.print("[" + s + "]");
+            }
+            System.out.println("");
         }
     }
 
@@ -56,48 +109,61 @@ public class main {
         String mins = "";
         String event = "";
         String day = "";
-        
+
         protected dateEvent(String day, String mins, String event) {
             this.mins = mins;
             this.event = event;
             this.day = day;
         }
-        
-        public static Comparator<dateEvent> sort = new Comparator<dateEvent>(){
+
+        public static Comparator<dateEvent> sort = new Comparator<dateEvent>() {
             @Override
             public int compare(dateEvent o1, dateEvent o2) {
                 Date d1 = new Date(1518, o1.getMonth(), o1.getDay(), o1.returnhours(), o1.returnminutes());
                 Date d2 = new Date(1518, o2.getMonth(), o2.getDay(), o2.returnhours(), o2.returnminutes());
                 return d1.compareTo(d2);
             }
-            
+
         };
-        
-        
-        protected int getMonth(){
+
+        protected int getMonth() {
             char[] temp = day.toCharArray();
-            
+
             return Integer.parseInt((temp[0] + "" + temp[1]));
         }
-        
-        protected int getDay(){
+
+        protected int getDay() {
             char[] temp = day.toCharArray();
-            
+
             return Integer.parseInt((temp[3] + "" + temp[4]));
         }
-        
-        protected int returnhours(){
+
+        protected int returnhours() {
             char[] temp = mins.toCharArray();
-            
-            
+
             return Integer.parseInt((temp[0] + "" + temp[1]));
         }
-        
+
         protected int returnminutes() {
             char[] temp = mins.toCharArray();
-            
-            
+
             return Integer.parseInt((temp[3] + "" + temp[4]));
+        }
+
+        private String getID() {
+            String[] temp = event.split("\\s");
+            switch (temp[0]) {
+                case "Guard": {
+                    return temp[1];
+                }
+                case "Falls": {
+                    return "falls";
+                }
+                case "Wakes": {
+                    return "Wakes";
+                }
+            }
+            return null;
         }
     }
 }
