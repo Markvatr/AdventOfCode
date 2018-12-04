@@ -39,19 +39,50 @@ public class main {
         Iterator it = charmap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            if((int)pair.getValue() == 2){
+            if ((int) pair.getValue() == 2) {
                 dubbs = true;
-            }else if((int)pair.getValue() == 3){
+            } else if ((int) pair.getValue() == 3) {
                 tripps = true;
             }
             it.remove(); // avoids a ConcurrentModificationException
         }
-        if(dubbs) dubbles++;
-        if(tripps) tripples++;
+        if (dubbs) {
+            dubbles++;
+        }
+        if (tripps) {
+            tripples++;
+        }
     }
-    
-    private static void compareBox(String s){
-        
+
+    private static void compareBox(String s1, String s2) {
+        char[] chars = s1.toCharArray();
+        String ret = "";
+        ArrayList<Character> charlist1 = new ArrayList<Character>();
+        for (char c : chars) {
+            charlist1.add(c);
+        }
+        chars = s2.toCharArray();
+        ArrayList<Character> charlist2 = new ArrayList<Character>();
+        for (char c : chars) {
+            charlist2.add(c);
+        }
+
+        int errors = 0;
+        for (int i = 0; i < charlist1.size(); i++) {
+            if (charlist1.get(i).equals(charlist2.get(i))) {
+                ret+= charlist1.get(i);
+            } else {
+                errors++;
+                if (errors > 1) {
+                    break;
+                }
+            }
+
+        }
+        if (errors == 1){
+            System.out.println(s1 + "\n" + s2 + "\n" + ret +"\n");
+            
+        } 
     }
 
     public static void main(String[] args) {
@@ -70,12 +101,11 @@ public class main {
 //                scanBox(s);
 //            }
 //            System.out.println((dubbles * tripples)+"");
-
-            for (String s : boxes) {
-                compareBox(s);
+            for (int i = 1; i < boxes.size(); i++) {
+                for (String s : boxes) {
+                    compareBox(s, boxes.get(i));
+                }
             }
-
-            
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
