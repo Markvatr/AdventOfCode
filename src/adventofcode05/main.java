@@ -28,27 +28,28 @@ public class main {
         }
         ArrayList<Character> temp;
         ArrayList<Integer> count = new ArrayList<Integer>();
+        int lowestoccurences = Integer.MAX_VALUE;
         for (int i = 0; i < 25; i++) {
-            temp = (ArrayList<Character>)charData.clone();
-            removeCharNr(i);
+            temp = (ArrayList<Character>) charData.clone();
+            removeCharNr(temp, i);
             int counter = 0;
             boolean noRepetitions = false;
-            int occurences = 0;
+
             while (!noRepetitions) {
                 noRepetitions = true;
-                for (int j = 0; j < charData.size(); j++) {
-                    Character lower = ("" + charData.get(j)).toLowerCase().charAt(0);
-                    Character upper = ("" + charData.get(j)).toUpperCase().charAt(0);
-                    if (j + 1 != charData.size()) {
-                        if (charData.get(j).equals(lower)) {
-                            if (charData.get(j + 1).equals(upper)) {
-                                rmChars(charData, j);
+                for (int j = 0; j < temp.size(); j++) {
+                    Character lower = ("" + temp.get(j)).toLowerCase().charAt(0);
+                    Character upper = ("" + temp.get(j)).toUpperCase().charAt(0);
+                    if (j + 1 != temp.size()) {
+                        if (temp.get(j).equals(lower)) {
+                            if (temp.get(j + 1).equals(upper)) {
+                                rmChars(temp, j);
                                 noRepetitions = false;
                                 break;
                             }
-                        } else if (charData.get(j).equals(upper)) {
-                            if (charData.get(j + 1).equals(lower)) {
-                                rmChars(charData, j);
+                        } else if (temp.get(j).equals(upper)) {
+                            if (temp.get(j + 1).equals(lower)) {
+                                rmChars(temp, j);
                                 noRepetitions = false;
                                 break;
                             }
@@ -56,11 +57,19 @@ public class main {
                     }
                 }
                 counter++;
-                System.out.println("nextLoop: " + counter);
+                //System.out.println("nextLoop: " + counter);
             }
-            count.add(counter);
+            count.add(temp.size());
+            System.out.println(i + " : " + temp.size());
+
         }
-        System.out.println(charData.size());
+        for (int i : count) {
+            if (i < lowestoccurences) {
+                lowestoccurences = i;
+            }
+        }
+        System.out.println(lowestoccurences);
+        //System.out.println(charData.size());
     }
 
     private static void rmChars(ArrayList<Character> c, int j) {
@@ -70,9 +79,18 @@ public class main {
 
     private static void removeCharNr(ArrayList<Character> c, int i) {
         Character ch;
-        char[] Chars = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','r','s','t','u','v','w','x','y','z'};
-        for(int j = 0 ; j < c.size(); j++){
-            
+        char[] charslower = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        char[] charsupper = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        ArrayList<Character> removals = new ArrayList<Character>();
+        for (Character cha : c) {
+            if (cha.equals((Character) charslower[i]) || cha.equals((Character) (charsupper[i]))) {
+                removals.add(cha);
+
+            }
+
+        }
+        for (Character cha : removals) {
+            c.remove(cha);
         }
     }
 }
